@@ -1,9 +1,10 @@
 const db = require('../models')
+const { makeResponse, response500 } = require('../utils/makeResponse')
 
 async function registerLoginUser(req, res) {
 	const { user } = req.body
 	if (!user) {
-		return res.status(404).send({ status: 404 })
+		return makeResponse(res, 404, 'User is required')
 	}
 	try {
 		const userStored = await db.User.findOne({ userId: user.sub.toString() }).lean().exec()
@@ -19,18 +20,18 @@ async function registerLoginUser(req, res) {
 			})
 			try {
 				const userSaved = await newUser.save()
-				return res.status(200).send({ status: 200, message: 'User created successful', user: userSaved })
+				return makeResponse(res, 200, 'User created successful', userSaved)
 			} catch (err) {
 				if (err.code === 11000) {
-					return res.status(501).send({ status: 501, err: err, message: 'Email exists' })
+					return makeResponse(res, 501, 'Email exists', null, err)
 				}
-				return res.status(501).send({ status: 501, message: 'Server error', error: err })
+				return response500(err)
 			}
 		} else {
-			return res.status(201).send({ status: 201, user: userStored })
+			return makeResponse(res, 201, null, userStored)
 		}
 	} catch (err) {
-		return res.status(500).send({ status: 500, message: 'Server error', error: err })
+		return response500(err)
 	}
 }
 
