@@ -8,6 +8,7 @@ api
   .delete('/category/:categoryId', md_auth.ensureAuth, controller.deleteCategory)
   .get('/full-categories', controller.getFullCategories)
   .get('/categories', controller.getCategories)
+  .get('/categories-name', controller.getCategoriesName)
   .get('/category/:categoryId', controller.getCategoryById)
   .put('/category-image/:categoryId', md_auth.ensureAuth, controller.updateCategoryImage)
 
