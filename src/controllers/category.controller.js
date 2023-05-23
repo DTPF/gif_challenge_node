@@ -37,6 +37,20 @@ async function getCategories(req, res) {
 	}
 }
 
+async function getCategoriesName(req, res) {
+	try {
+		const categoriesStored = await db.Category.aggregate([{
+			$project: {
+				_id: 1,
+				name: 1,
+			}
+		}])
+		return makeResponse(res, 200, null, categoriesStored)
+	} catch (err) {
+		return response500(err)
+	}
+}
+
 async function getFullCategories(req, res) {
 	try {
 		const categoriesStored = await db.Category.find().populate('gifs').lean().exec()
@@ -108,4 +122,5 @@ module.exports = {
 	getCategoryById,
 	deleteCategory,
 	updateCategoryImage,
+	getCategoriesName
 }
