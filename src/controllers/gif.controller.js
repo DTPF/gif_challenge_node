@@ -173,6 +173,20 @@ async function getGifsByCategory(req, res) {
 	}
 }
 
+async function searchGifs(req, res) {
+	const { query } = req.params
+	if (query.length < 2) {
+		return res.status(404).send({ status: 404 })
+	}
+	try {
+		const gifs = await db.Gif.find({ $text: { $search: query } }).populate('user')
+		return makeResponse(res, 200, 'Search gifs successful', gifs)
+	} catch (err) {
+		return response500(res, err)
+	}
+}
+
+
 module.exports = {
 	postGif,
 	getGifs,
@@ -182,5 +196,6 @@ module.exports = {
 	updateGifImage,
 	incrementSharedCount,
 	getGifsByUser,
-	getGifsByCategory
+	getGifsByCategory,
+	searchGifs
 }
