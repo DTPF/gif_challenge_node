@@ -17,7 +17,7 @@ async function postCategory(req, res) {
 		if (err.code === 11000) {
 			return makeResponse(res, 501, 'Category exists')
 		}
-		return response500()
+		return response500(res, err)
 	}
 }
 
@@ -33,7 +33,7 @@ async function getCategories(req, res) {
 		}])
 		return makeResponse(res, 200, null, categoriesStored)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 
@@ -47,7 +47,7 @@ async function getCategoriesName(req, res) {
 		}])
 		return makeResponse(res, 200, null, categoriesStored)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 
@@ -56,7 +56,7 @@ async function getFullCategories(req, res) {
 		const categoriesStored = await db.Category.find().populate('gifs').lean().exec()
 		return makeResponse(res, 200, null, categoriesStored)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 
@@ -69,7 +69,7 @@ async function getCategoryById(req, res) {
 		}
 		return makeResponse(res, 200, 'Get category successful', categoryStored)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 
@@ -84,7 +84,7 @@ async function deleteCategory(req, res) {
 		await db.Category.findOneAndDelete({ _id: categoryId }).exec()
 		return makeResponse(res, 200)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 
@@ -108,10 +108,14 @@ async function updateCategoryImage(req, res) {
 			},
 			{ returnOriginal: false }
 		).lean().exec()
-		await fs.unlink(req.files.image.tempFilePath)
 		return makeResponse(res, 200, 'Image uploaded successful', categoryStored)
 	} catch (err) {
-		return response500(err)
+		await fs.unlink(req.files.image.tempFilePath)
+		console.log(err);
+		if (err.http_code === 400) {
+			return res.status(400).send({ status: 400, message: 'Max. 10Mb per image' })
+		}
+		return response500(res, err)
 	}
 }
 
@@ -124,7 +128,7 @@ async function getCategoryName(req, res) {
 		}
 		return makeResponse(res, 200, 'Get category name successful', categoryStored.name)
 	} catch (err) {
-		return response500(err)
+		return response500(res, err)
 	}
 }
 

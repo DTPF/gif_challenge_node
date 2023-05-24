@@ -32,7 +32,7 @@ const CONFIG = {
   },
   production: {
     app: {
-      PORT: process.env.PORT_SERVER || 4005,
+      PORT: process.env.PORT_SERVER || 4006,
       API_VERSION: process.env.API_VERSION,
       PORT_MONGO_DB: process.env.PORT_MONGO_DB
     },
