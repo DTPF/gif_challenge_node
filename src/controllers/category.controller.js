@@ -63,11 +63,11 @@ async function getFullCategories(req, res) {
 async function getCategoryById(req, res) {
 	const { categoryId } = req.params
 	try {
-		const categoryStored = await db.Category.find({ _id: categoryId }).lean().exec()
+		const categoryStored = await db.Category.findOne({ _id: categoryId }).populate('gifs').populate('gifs.user').lean().exec()
 		if (!categoryStored) {
 			return makeResponse(res, 400, 'Not exist')
 		}
-		return makeResponse(res, 200, null, categoryStored)
+		return makeResponse(res, 200, 'Get category successful', categoryStored)
 	} catch (err) {
 		return response500(err)
 	}
@@ -115,6 +115,19 @@ async function updateCategoryImage(req, res) {
 	}
 }
 
+async function getCategoryName(req, res) {
+	const { categoryId } = req.params
+	try {
+		const categoryStored = await db.Category.findOne({ _id: categoryId }).lean().exec()
+		if (!categoryStored) {
+			return makeResponse(res, 400, 'Not exist')
+		}
+		return makeResponse(res, 200, 'Get category name successful', categoryStored.name)
+	} catch (err) {
+		return response500(err)
+	}
+}
+
 module.exports = {
 	postCategory,
 	getCategories,
@@ -122,5 +135,6 @@ module.exports = {
 	getCategoryById,
 	deleteCategory,
 	updateCategoryImage,
-	getCategoriesName
+	getCategoriesName,
+	getCategoryName
 }
