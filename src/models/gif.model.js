@@ -18,6 +18,7 @@ const GifSchema = new Schema({
   timestamps: true
 })
 
+GifSchema.index({ name: "text" })
 const GifModel = model('Gif', GifSchema)
 
 module.exports = GifModel
