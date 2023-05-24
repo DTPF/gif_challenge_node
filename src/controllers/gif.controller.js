@@ -157,6 +157,22 @@ async function incrementSharedCount(req, res) {
 	}
 }
 
+async function getGifsByCategory(req, res) {
+	const { categoryId } = req.params
+	try {
+		const category = await db.Category.findOne({ _id: categoryId })
+		const gifsStored = await db.Gif.find({ categories: categoryId }).populate('user').populate('categories').lean().exec()
+		const result = {
+			gifs: gifsStored,
+			categoryName: category.name
+		}
+		gifsStored.category = category.name
+		return makeResponse(res, 200, 'Get gifs successful', result)
+	} catch (err) {
+		return response500(res, err)
+	}
+}
+
 module.exports = {
 	postGif,
 	getGifs,
@@ -165,5 +181,6 @@ module.exports = {
 	updateGif,
 	updateGifImage,
 	incrementSharedCount,
-	getGifsByUser
+	getGifsByUser,
+	getGifsByCategory
 }

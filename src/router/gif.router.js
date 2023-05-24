@@ -12,5 +12,6 @@ api
   .put('/gif/:gifId', md_auth.ensureAuth, controller.updateGif)
   .put('/gif-image/:gifId', md_auth.ensureAuth, controller.updateGifImage)
   .put('/increment-shared-count/:gifId', controller.incrementSharedCount)
+  .get('/gifs-by-category/:categoryId', controller.getGifsByCategory)
 
 module.exports = api;
