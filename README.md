@@ -33,9 +33,6 @@ We welcome contributions to enhance the functionality and user experience of thi
 5. Submit a pull request.
 Please ensure that your code follows the existing coding style and conventions.
 
-License
-This project is licensed under the MIT License. You are free to modify and distribute the code as per the terms of the license.
-
 ## Authors ✨
 <table>
   <tbody>
@@ -56,7 +53,5 @@ This project is licensed under the MIT License. You are free to modify and distr
   </tbody>
 </table>
 
-Contributions of any kind are welcome!
-
 ## License
-This project is licensed under the MIT License
+This project is licensed under the MIT License. You are free to modify and distribute the code as per the terms of the license.
