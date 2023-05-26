@@ -96,12 +96,13 @@ async function updateGifImage(req, res) {
 			},
 			{ returnOriginal: false }
 		).lean().exec()
-		await fs.unlink(req.files.image.tempFilePath)
 		const findUser = await db.User.findOne({ _id: gifUpdated.user })
 		gifUpdated.user = findUser
 		return makeResponse(res, 200, 'Image updated successful', gifUpdated)
 	} catch (err) {
 		return response500(res, err)
+	} finally {
+		await fs.unlink(req.files.image.tempFilePath)
 	}
 }
 
